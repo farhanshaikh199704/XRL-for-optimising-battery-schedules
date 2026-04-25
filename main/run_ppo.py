@@ -1,6 +1,7 @@
 import os
 import json
 from typing import Any
+from pathlib import Path
 
 from envs.environments import FreeBatteryEnv
 from envs.env_params import al4_bat_ea
@@ -25,34 +26,24 @@ SAVE_PATH = os.path.join(src_dir, 'log', ENV_KWARGS['env_name'], 'ppo', 'run', i
 DISCRETE_ACTIONS = None
 
 # EXP PARAMS
+ROOT = Path(__file__).resolve().parent.parent
+TFT_CKPT = ROOT / "forecasters" / "trained_models" / "tft_24h"
 EXP_PARAMS = {
-    'n_runs': 5,
+    'n_runs':     5,
     'n_episodes': 50,
-    'seed': 22,
-    # Env
-    'flatten_obs': True,
-    # Normalization
-    'norm_obs': True,
-    'norm_reward': True,
-    # Evaluation
+    'seed':       22,
+    'flatten_obs':    True,
+    'norm_obs':       True,
+    'norm_reward':    True,
     'eval_while_training': True,
-    'eval_freq': 8760 * 1,
-    # Perfect forecasts
-    # 'perfect_forecasts': [1, 2, 3, 6, 12, 18, 24],
+    'eval_freq':  8760 * 1,
     'perfect_forecasts': None,
-    # Actual forecasts
-    # 'forecasts': None,
-    'forecasts': {'log_folder_paths': [
-        os.path.join(src_dir, 'forecasters/trained_models/lstm1hour'),
-        os.path.join(src_dir, 'forecasters/trained_models/hybrid2hours'),
-        os.path.join(src_dir, 'forecasters/trained_models/cnn3hours'),
-        os.path.join(src_dir, 'forecasters/trained_models/cnn6hours'),
-        os.path.join(src_dir, 'forecasters/trained_models/cnn8hours'),
-        os.path.join(src_dir, 'forecasters/trained_models/cnn12hours'),
-        os.path.join(src_dir, 'forecasters/trained_models/cnn18hours'),
-        os.path.join(src_dir, 'forecasters/trained_models/cnn24hours'),
-    ],
-        'path_datafile': os.path.join(src_dir, 'data/alberta3/ab_2018-2022_electricity_time_climate.csv')},
+    'forecasts': {'tft_checkpoint': TFT_CKPT},  # your TFT
+
+    # ── ADD THIS ──────────────────────────────────────────────────
+    'use_demonstrations': True,   # enables SACfD / DQNfD
+    'demo_rule': 'mean_price',    # rule from eq. 11 in the paper
+    # ─────────────────────────────────────────────────────────────
 }
 
 # PPO PARAMS

@@ -5,7 +5,7 @@ from typing import Any
 import numpy as np
 
 from envs.environments import FreeBatteryEnv
-from envs.env_params import al4_bat_ea
+from envs.env_params import de_bat_baseline,  de_bat_tft
 from utils.net_design import activation_fn_dict, net_arch_dict
 from utils.scheduler import linear_schedule
 from utils.utilities import create_stats_file, src_dir
@@ -13,17 +13,17 @@ from train.train import train_rl_agent
 
 # PLANT PARAMS
 ENV = FreeBatteryEnv
-ENV_KWARGS = al4_bat_ea
+ENV_KWARGS = de_bat_baseline # swap to de_bat_tft for TFT condition
 
 # LOG
-CREATE_LOG = False
+CREATE_LOG = True
 VERBOSE = 0
 LOGGER_TYPE = ["csv"]
 SAVE_PATH = os.path.join(src_dir, 'log', ENV_KWARGS['env_name'], 'dqn', 'run', input('Save in folder: ')) \
     if CREATE_LOG else None
 
 # ACTIONS
-DISCRETE_ACTIONS = [np.array([-1]), np.array([0]), np.array([1])]
+DISCRETE_ACTIONS = [np.array([-1.0]),np.array([-0.5]), np.array([0]), np.array([0.5]), np.array([1.0])]
 
 # EXP PARAMS
 EXP_PARAMS = {
@@ -41,19 +41,7 @@ EXP_PARAMS = {
     # Perfect forecasts
     # 'perfect_forecasts': [1, 2, 3, 6, 12, 18, 24],
     'perfect_forecasts': None,
-    # Actual forecasts
-    # 'forecasts': None,
-    'forecasts': {'log_folder_paths': [
-        os.path.join(src_dir, 'forecasters/trained_models/lstm1hour'),
-        os.path.join(src_dir, 'forecasters/trained_models/hybrid2hours'),
-        os.path.join(src_dir, 'forecasters/trained_models/cnn3hours'),
-        os.path.join(src_dir, 'forecasters/trained_models/cnn6hours'),
-        os.path.join(src_dir, 'forecasters/trained_models/cnn8hours'),
-        os.path.join(src_dir, 'forecasters/trained_models/cnn12hours'),
-        os.path.join(src_dir, 'forecasters/trained_models/cnn18hours'),
-        os.path.join(src_dir, 'forecasters/trained_models/cnn24hours'),
-    ],
-        'path_datafile': os.path.join(src_dir, 'data/alberta3/ab_2018-2022_electricity_time_climate.csv')},
+    'forecasts': None
 }
 
 # DQN PARAMS
