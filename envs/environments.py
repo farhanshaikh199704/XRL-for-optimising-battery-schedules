@@ -39,6 +39,7 @@ class FreeBatteryEnv(BatteryBaseEnv):
                  tracking: bool = True,
                  debug: bool = False,
                  precision_level: Optional[str] = "low",
+                 tft_24h: Optional[str]=None
                  ):
         """
         Initializes the FreeBatteryEnv class.
@@ -68,6 +69,16 @@ class FreeBatteryEnv(BatteryBaseEnv):
         self.state_vars = state_vars
         self.debug = debug
 
+        # TFT Forecaster
+        self.tft_forecaster=None
+
+        if tft_24h is not None:
+            from forecasters.tft_forecaster import TFTForecaster
+            self.tft_forecaster=TFTForecaster(
+                checkpoint_path=tft_24h,
+                csv_path=data_file
+            )
+
         # PREPARE MAIN DATA FILE
         self.data = self._init_data(data_file=data_file,
                                     state_vars=state_vars,
@@ -84,6 +95,12 @@ class FreeBatteryEnv(BatteryBaseEnv):
         for clm in self.state_vars:  # add variables from data file to observation space
             low, high = self.data[clm].min(), self.data[clm].max()
             self.observation_space[clm] = spaces.Box(low=low, high=high, shape=(1,))
+        
+        # ── ADD TFT DIMS TO OBS SPACE IF ACTIVE ──────────────────
+        if self.tft_forecaster is not None:
+            self.observation_space['tft_forecasts'] = spaces.Box(
+                low=-1000, high=2000, shape=(96,), dtype=np.float32
+            )
 
         # DEFINE ACTION SPACE
         self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=self.precision['float'])
@@ -102,8 +119,8 @@ class FreeBatteryEnv(BatteryBaseEnv):
         self.storage_flow, bat_degr_cost = self.storage.step(action=action[0], avail_power=np.inf)
 
         # Compute sales of electricity
-        e_sales = self.grid.get_grid_interaction(e_flow=self.storage_flow, pool_price=self.obs['pool_price'].item())
-
+        pool_price = float(self.data.iloc[self.count]['pool_price'])
+        e_sales = self.grid.get_grid_interaction(e_flow=self.storage_flow, pool_price=pool_price)
         # Subtract battery degradation cost
         reward = e_sales - bat_degr_cost
 
@@ -120,6 +137,7 @@ class FreeBatteryEnv(BatteryBaseEnv):
             print(f'\tGrid sales: {round(e_sales, 3)} | '      
                   f'\tReward: {round(reward, 3)}')
             print()
+
 
         if self.tracking:
             self._tracking(
@@ -148,6 +166,11 @@ class FreeBatteryEnv(BatteryBaseEnv):
         }
         for i in self.state_vars:
             obs[i] = np.array([row[i]], dtype=self.precision["float"])
+
+        if self.tft_forecaster is not None:
+            obs['tft_forecasts']=self.tft_forecaster.build_state_extension(
+                current_time_idx=self.count
+            )
 
         self.obs = obs
         return obs, False

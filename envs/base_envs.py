@@ -197,8 +197,9 @@ class BaseEnv(gym.Env):
                                  f'but "wind_power" and/or "pv_power" columns not in data file.')
 
         # Remove all columns except the 'Date' column that are not in the observation space
-        data.drop([i for i in data.columns if i != 'Date' and i not in state_vars],
-                  axis=1, inplace=True)
+        cols_to_keep = state_vars + ['pool_price', 'Date']
+        data.drop([i for i in data.columns if i not in cols_to_keep],
+          axis=1, inplace=True)
 
         # Open demand file and add demand (in MW) to data file
         if demand_file is not None:
