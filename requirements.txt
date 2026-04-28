@@ -1,0 +1,51 @@
+# ============================================================
+# requirements.txt — XRL Battery Scheduling (Shaikh 2025)
+# German EPEX DAM arbitrage with DQN/PPO + TFT forecasting
+# ============================================================
+#
+# Python: 3.10 – 3.12  (Colab default is 3.10)
+#
+# Install:
+#   pip install -r requirements.txt
+#
+# Colab (A100):
+#   !pip install -r requirements.txt -q
+#
+# Key version constraints:
+#   - numpy pinned to 1.x — shap 0.44 and SB3 2.3 both break on numpy 2.x
+#   - gymnasium pinned to 0.29.x — SB3 2.3.x ceiling before API changes
+#   - torch 2.3.1 — matches Colab A100 CUDA 12.1 image
+#   - pytorch-forecasting 1.1.1 + lightning 2.3.3 — tested stable pair
+#   - shap 0.44.1 — DeepExplainer stable with torch 2.x
+# ============================================================
+
+
+# ── CORE SCIENTIFIC STACK ────────────────────────────────────
+numpy==1.26.4
+pandas==2.2.2
+scipy==1.13.1
+
+# ── DEEP LEARNING ────────────────────────────────────────────
+# Install torch separately with CUDA index on Colab:
+#   pip install torch==2.3.1+cu121 --index-url https://download.pytorch.org/whl/cu121
+torch==2.3.1
+
+# ── REINFORCEMENT LEARNING ───────────────────────────────────
+# [extra] includes tensorboard, rich, and other SB3 optional deps
+stable-baselines3[extra]==2.3.2
+gymnasium==0.29.1
+
+# ── TEMPORAL FUSION TRANSFORMER ──────────────────────────────
+pytorch-forecasting==1.1.1
+lightning==2.3.3
+
+# ── EXPLAINABILITY ───────────────────────────────────────────
+shap==0.44.1
+
+# ── VISUALISATION ────────────────────────────────────────────
+matplotlib==3.9.0
+seaborn==0.13.2
+
+# ── UTILITIES ────────────────────────────────────────────────
+tqdm==4.66.4
+openpyxl==3.1.3
