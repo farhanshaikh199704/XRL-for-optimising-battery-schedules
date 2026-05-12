@@ -17,7 +17,7 @@ The paper primarily addresses the following three questions:
 **RQ3 —**  How do explainability techniques help attribute performance differences to forecast error versus policy error?
 
 
-Explainability Layer:
+Explainability Layer: \\
 **Action attribution:** Why did the agent choose action $a$ at hour $t$?
 Method: DeepSHAP on the DQN Q-network (model-explaining, post-hoc, local).
 
