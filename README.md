@@ -1,20 +1,30 @@
-# XRL for Optimising Battery Schedules
+## Application of Explainable Reinforcement Learning (XRL) in Battery Dispatch
 
-**Master's Thesis — Farhan Shaikh, Hertie School, 2025**
+The repo was prepared to contain a reproducible codebase for the paper, Optimising Battery Dispatch Schedules in European Electricity Markets with XRL and Time-series Forecasting. 
 
-Explainable reinforcement learning for economic battery dispatch on the German EPEX Day-Ahead Market (DAM). Extends Sage et al. (ICCAD 2023) to the German market with Temporal Fusion Transformer price forecasting, IDM intraday features, and a three-question XRL explainability pipeline.
+The paper explores the potential of reinforcement learning in addressing the dynamic, sequential problem of battery dispatch schedules in energy markets. It takes inspiration from a growing body of work focussed on augmenting these techniques such that they effectively respond to the real-life dynamics of day-ahead and continuous intraday markets. In particular, it attempts to improve the decision-making process by RL agents by integrating a Temporal Fusion Transformer and make the policies of these models interpretable through emerging XAI methods.    
 
 ---
 
 ## Research Questions
 
-**RQ1 — Action attribution:** Why did the agent choose action $a$ at hour $t$?
+The paper primarily addresses the following three questions: 
+
+**RQ1—** To what extent does TFT-based price forecasting improve DQN and PPO dispatch performance relative to their baseline forms?
+
+**RQ2 —** Which algorithm—DQN or PPO—demonstrates greater compatibility with TFT augmentation in terms of reward and stability?
+
+**RQ3 —**  How do explainability techniques help attribute performance differences to forecast error versus policy error?
+
+
+Explainability Layer:
+**Action attribution:** Why did the agent choose action $a$ at hour $t$?
 Method: DeepSHAP on the DQN Q-network (model-explaining, post-hoc, local).
 
-**RQ2 — Temporal P&L decomposition:** Which hours in the delivery day drove daily profit and loss?
+**Temporal P&L decomposition:** Which hours in the delivery day drove daily profit and loss?
 Method: Hourly reward decomposition and Q-value advantage (reward-explaining, EDGE-style critical timestep).
 
-**RQ3 — Pipeline attribution:** For a big-loss event, was it forecast error, policy error, or both?
+**Pipeline attribution:** For a big-loss event, was it forecast error, policy error, or both?
 Method: Oracle counterfactual state — TFT forecasts replaced with realised prices to isolate which pipeline stage failed (novel extension of Saulieres 2025 §4.3).
 
 ---
