@@ -32,7 +32,7 @@ torch==2.3.1
 
 # ── REINFORCEMENT LEARNING ───────────────────────────────────
 # [extra] includes tensorboard, rich, and other SB3 optional deps
-stable-baselines3[extra]==2.3.2
+stable-baselines3==2.3.2
 gymnasium==0.29.1
 
 # ── TEMPORAL FUSION TRANSFORMER ──────────────────────────────
