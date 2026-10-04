@@ -16,17 +16,6 @@ The paper primarily addresses the following three questions:
 
 **RQ3 —**  How do explainability techniques help attribute performance differences to forecast error versus policy error?
 
-
-Explainability Layer: \\
-**Action attribution:** Why did the agent choose action $a$ at hour $t$?
-Method: DeepSHAP on the DQN Q-network (model-explaining, post-hoc, local).
-
-**Temporal P&L decomposition:** Which hours in the delivery day drove daily profit and loss?
-Method: Hourly reward decomposition and Q-value advantage (reward-explaining, EDGE-style critical timestep).
-
-**Pipeline attribution:** For a big-loss event, was it forecast error, policy error, or both?
-Method: Oracle counterfactual state — TFT forecasts replaced with realised prices to isolate which pipeline stage failed (novel extension of Saulieres 2025 §4.3).
-
 ---
 
 ## Experimental Conditions
