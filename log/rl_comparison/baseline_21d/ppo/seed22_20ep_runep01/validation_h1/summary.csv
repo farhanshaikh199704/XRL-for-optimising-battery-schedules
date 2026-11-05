@@ -1,0 +1,2 @@
+model,period,steps,total_reward_eur,reward_per_hour_eur
+PPO_baseline_21d,2025-H1,4344,-172.493878,-0.039708535451197055

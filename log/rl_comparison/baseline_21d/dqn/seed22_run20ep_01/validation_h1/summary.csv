@@ -1,0 +1,2 @@
+model,period,steps,total_reward_eur,reward_per_hour_eur
+DQN_baseline_21d,2025-H1,4344,20367.911615,4.688745767725599
